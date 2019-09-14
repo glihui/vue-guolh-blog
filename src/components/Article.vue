@@ -1,12 +1,12 @@
 <template>
-    <div class="article-box">
-        <img class="article-img" src="@/assets/logo.png"/>
+    <div class="article-box" @click="goDetail">
+        <img class="article-img" :src="articleValue.img"/>
         <div class="article-msg">
             <p class="article-title">
-                Python教程
+                {{articleValue.title}}
             </p>
             <p class="article-content">
-                小白的Python新手教程，具有如下特点：中文，免费，零起点，完整示例，基于最新的Python 3版本。随着AI时代的来临，Python已经是必学语言。
+                {{articleValue.body}}
             </p>
         </div>
     </div>
@@ -16,8 +16,17 @@ import { Component, Provide, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class Article extends Vue {
-    @Prop() private banList!: Object;
+    @Prop() private articleValue!: any;
     @Provide() msg: string = '';
+
+    goDetail() {
+        this.$router.push({
+            name:'detail',
+            params: {
+                id: this.articleValue.id
+            }
+        })
+    }
 }
 </script>
 
@@ -26,11 +35,13 @@ export default class Article extends Vue {
         height: 110px;
         display: flex;
         padding: 10px 0;
+        cursor: pointer;
         .article-img{
             width: 160px;
             height: 90px;
         }
         .article-msg{
+            flex:1;
             margin-left: 20px; 
             .article-title{
                 font-size: 18px;
@@ -38,6 +49,11 @@ export default class Article extends Vue {
                 color: #0593d3;
             }
             .article-content{
+                width: 100%;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 3;
+                overflow: hidden;
                 margin-top: 10px;
                 font-size: 14px;
                 line-height: 20px;

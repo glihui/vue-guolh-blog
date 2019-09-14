@@ -3,7 +3,7 @@
         <div class="blog_name">Dream It Possible</div>
         <ul class="tab_ul">
             <li class="tab_li" :key="index" v-for="(item, index) in tabs" @click="goTabPage(item.id)">
-                {{item.title}}
+                {{item.name}}
             </li>
         </ul>
     </div>
@@ -12,39 +12,35 @@
 import {
     Component, Provide, Prop, Vue
 } from 'vue-property-decorator';
+import Api from '@/api/api.js';
+import { mapActions, mapGetters } from 'vuex';
 
-@Component
+@Component({
+    ...mapGetters(['categories']),
+    ...mapActions(['getTopics', 'getCategories'])
+})
+
 export default class HomeTab extends Vue {
-    @Prop() private msg!: string;
-    @Provide() tabs: Array<Object> = [
-        {
-            'id':0,
-            'title':'首页',
-        },
-        {
-            'id':1,
-            'title':'编程',
-        },
-        {
-            'id':2,
-            'title':'读书',
-        },
-        {
-            'id':3,
-            'title':'旅游',
-        },
-        {
-            'id':4,
-            'title':'运动',
-        }
-    ];
+    created() {
+        this.$store.dispatch('getCategories');
+        this.$store.dispatch('getTopics', {id: 1});
+    }
 
     goTabPage(id:number) {
-        if (id === 0) {
-            this.$router.push('/');
+        this.$store.dispatch('getTopics', {id});
+        if (id === 1) {
+            this.$router.push('/').catch(err => {
+                console.log(err);
+            });
         } else {
-            this.$router.push(`/category/${id}`);
+            this.$router.push(`/category/${id}`).catch(err => {
+                console.log(err);
+            });
         }
+    }
+
+    get tabs() {
+        return this.$store.state.categories;
     }
 }
 </script>

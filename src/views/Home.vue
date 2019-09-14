@@ -4,9 +4,14 @@
     <div class="article-reply">
       <div class="article-list">
         <h1 class="article-list-title">推荐文章</h1>
-        <Article v-for="(item, index) in 4" :key="index"></Article>
+        <Article 
+        v-for="(item, index) in topicsList" 
+        :key="index"
+        :articleValue="item"
+        >
+        </Article>
       </div>
-      <div class="reply-list">
+      <div class="reply-list" v-if="false">
         <h1 class="reply-list-title">最新帖子</h1>
         <Reply v-for="(item, index) in 4" :key="index"></Reply>
       </div>
@@ -15,10 +20,12 @@
 </template>
 
 <script lang="ts">
+import Api from '@/api/api.js';
 import { Component, Vue, Provide } from 'vue-property-decorator';
 import Banners from '@/components/Banners.vue';
 import Article from '@/components/Article.vue';
 import Reply from '@/components/Reply.vue';
+import { mapGetters } from 'vuex';
 
 @Component({
   components: {
@@ -26,6 +33,7 @@ import Reply from '@/components/Reply.vue';
     Article,
     Reply,
   },
+  ...mapGetters(['topics'])
 })
 export default class Home extends Vue {
   @Provide() banList: Array<Object> = [
@@ -36,6 +44,15 @@ export default class Home extends Vue {
       img: require('@/assets/banner2.jpg')
     }
   ];
+  @Provide() articleList: Array<Object> = [];
+
+  created () {
+    
+  }
+
+  get topicsList () {
+    return this.$store.state.topics.data || [];
+  }
 }
 </script>
 
@@ -44,7 +61,7 @@ export default class Home extends Vue {
     display: flex;
     margin: 0 20px;
     .article-list{
-      border-right: 1px solid #dddddd;
+      flex: 1;
       .article-list-title{
         margin-top: 10px;
         font-size: 18px;
@@ -53,6 +70,7 @@ export default class Home extends Vue {
       }
     }
     .reply-list{
+        border-left: 1px solid #dddddd;
         width: 316px;
         .reply-list-title{
             font-size: 18px;
