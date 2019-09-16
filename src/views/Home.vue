@@ -58,8 +58,9 @@ export default class Home extends Vue {
 
 <style lang="scss" scoped>
   .article-reply{
+    width: 1000px;
     display: flex;
-    margin: 0 20px;
+    margin: 0 auto;
     .article-list{
       flex: 1;
       .article-list-title{

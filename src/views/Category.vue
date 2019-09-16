@@ -1,12 +1,15 @@
 <template>
     <div class="cagegory_box">
-        <div>
+        <div v-if="!fetchIng">
             <h1 class="category_title">{{titleName}}</h1>
             <Article
              v-for="(item, index) in topicsList"
              :key="index"
              :articleValue="item"
             ></Article>
+        </div>
+        <div v-if="fetchIng" class="loading-box">
+            <img src="@/assets/loading.gif">
         </div>
     </div>
 </template>
@@ -26,6 +29,9 @@ export default class Category extends Vue{
     mounted() {
        
     }
+    get fetchIng () {
+        return this.$store.state.fetchIng;
+    }
     get topicsList () {
         return this.$store.state.topics.data || [];
     }
@@ -38,6 +44,7 @@ export default class Category extends Vue{
         }
         return titleValue;
     }
+    
 }
 </script>
 <style lang="scss" scoped>
@@ -49,6 +56,9 @@ export default class Category extends Vue{
             color: #444444;
             font-size: 18px;
         }
+    }
+    .loading-box{
+        text-align: center;
     }
 </style>
 

@@ -3,8 +3,6 @@
         <div class="title">{{detailMsg.title}}</div>
         <img class="article-img" :src="detailMsg.img"/>
         <div class="article-sub-msg">
-            <span class="name">{{detailMsg.user.name}}</span>
-            <span class="xie-g">/</span>
             <span class="type">{{detailMsg.category.name}}</span>
             <span class="xie-g">/</span>
             <span class="time">{{detailMsg.created_at}}</span>
@@ -44,7 +42,8 @@ export default class Detail extends Vue{
 
 <style lang="scss" scoped>
     .box{
-        padding-left: 25px;
+        width: 1000px;
+        margin:0 auto;
         .title{
             font-size: 18px;
             line-height: 70px;

@@ -6,6 +6,10 @@
                 {{item.name}}
             </li>
         </ul>
+        <div class="login_register">
+            <div class="login-btn">登录</div>
+            <div class="register-btn">注册</div>
+        </div>
     </div>
 </template>
 <script lang="ts">
@@ -48,6 +52,7 @@ export default class HomeTab extends Vue {
     .tab_box{
         display: flex;
         background-color:#0593d3; 
+        position: relative;
         .blog_name{
             line-height: 50px;
             font-size: 24px;
@@ -63,6 +68,22 @@ export default class HomeTab extends Vue {
                 font-size: 14px;
                 color: white;
                 cursor: pointer;
+            }
+        }
+        .login_register{
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            height: 50px;
+            line-height: 50px;
+            .login-btn, .register-btn{
+                font-size: 14px;
+                color:white;
+                cursor: pointer;
+            }
+            .register-btn{
+                margin: 0 20px;
             }
         }
     } 

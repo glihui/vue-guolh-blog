@@ -8,6 +8,12 @@
             <p class="article-content">
                 {{articleValue.body}}
             </p>
+            <div class="zan_browse">
+                <img class="zan-img" src="@/assets/no_zan.png">
+                <div class="zan-num">0</div>
+                <img class="brower-img" src="@/assets/brower.png">
+                <div class="brower-num">0</div>
+            </div>
         </div>
     </div>
 </template>
@@ -52,12 +58,27 @@ export default class Article extends Vue {
                 width: 100%;
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
-                -webkit-line-clamp: 3;
+                -webkit-line-clamp: 2;
                 overflow: hidden;
                 margin-top: 10px;
                 font-size: 14px;
                 line-height: 20px;
                 color: #666;
+            }
+            .zan_browse{
+                display: flex;
+                .zan-img, .brower-img{
+                    width: 14px;
+                    height: 14px;
+                }
+                .brower-img{
+                    margin-left: 20px;
+                }
+                .zan-num, .brower-num{
+                    margin-left: 4px;
+                    color: #b4b4b4;
+                    font-size: 12px;
+                }
             }
         }
     }

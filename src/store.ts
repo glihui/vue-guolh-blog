@@ -7,7 +7,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     categories: [],
-    topics: {}
+    topics: {},
+    fetchIng: false
   },
   mutations: {
     setTopics(state, topics) {
@@ -15,6 +16,9 @@ export default new Vuex.Store({
     },
     setCategories(state, categories) {
       state.categories = categories;
+    },
+    setFetchIng(state, fetchIng) {
+      state.fetchIng = fetchIng;
     }
   },
   actions: {
@@ -26,9 +30,11 @@ export default new Vuex.Store({
     },
     getTopics({commit, state, dispatch}, {id}) {
       console.log(id);
+      commit('setFetchIng', true);
       API.getCategoriesTopic(id).then((res: any) => {
           console.log(res);
-          commit('setTopics', res)
+          commit('setTopics', res);
+          commit('setFetchIng', false);
       });
     }
   },
