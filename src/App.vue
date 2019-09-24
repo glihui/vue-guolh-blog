@@ -10,13 +10,37 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import HomeTab from '@/components/HomeTab.vue';
+import API from '@/api/api.js';
 
 @Component({
   components: {
     HomeTab
   },
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  created() {
+    // 从缓存获取登录信息
+    let user:string = localStorage.getItem('user') || '';
+    if (user !== '') {
+      this.$store.commit('setUser', JSON.parse(user));
+
+      // 刷新token
+      API.refreshToken().then((res:any) => {
+        console.log(res);
+        if (res) {
+          let userObj = JSON.parse(user);
+          userObj.meta = res;
+          localStorage.setItem('user', JSON.stringify(userObj));
+          this.$store.commit('setUser', JSON.parse(userObj));
+        }
+        
+      }).catch(error => {
+          
+      });
+    }
+    
+  }
+}
 </script>
 
 <style lang="scss">

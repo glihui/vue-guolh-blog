@@ -33,13 +33,18 @@ export default {
         } : {
             params: params
         };
+        let user = localStorage.getItem('user');
+        console.log(';')
+        console.log(user);
+        let token = user && JSON.parse(user).meta.access_token;
         return customAxios({
             url: `/api/${url}`,
             method,
             ...paramsObj,
             responseType,
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+                'Authorization': `Bearer ${token}`
+                // 'Content-Type': 'application/x-www-form-urlencoded'
             }
         }).then(data => {
             return data;

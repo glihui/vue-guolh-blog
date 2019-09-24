@@ -8,7 +8,8 @@ export default new Vuex.Store({
   state: {
     categories: [],
     topics: {},
-    fetchIng: false
+    fetchIng: false,
+    user: {}
   },
   mutations: {
     setTopics(state, topics) {
@@ -19,6 +20,9 @@ export default new Vuex.Store({
     },
     setFetchIng(state, fetchIng) {
       state.fetchIng = fetchIng;
+    },
+    setUser(state, user) {
+      state.user = user;
     }
   },
   actions: {

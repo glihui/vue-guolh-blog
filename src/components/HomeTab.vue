@@ -6,18 +6,50 @@
                 {{item.name}}
             </li>
         </ul>
-        <div class="login_register">
-            <div class="login-btn">登录</div>
+        <div class="login_register" v-if="!userMsg.name">
+            <div class="login-btn" @click="dialogVisible = true">登录</div>
             <div class="register-btn">注册</div>
         </div>
+
+        <div class="user-msg" v-if="userMsg.name">
+            <img class="user-img" v-if="userMsg.avatar" :src="userMsg.avatar"/>
+            <img class="user-img" v-else src="@/assets/default_boy.png"/>
+            <span class="user-name">{{userMsg.name}}</span>
+            <span class="user-logout">退出</span>
+        </div>
+
+        <el-dialog
+            title="登录"
+            :center="true"
+            :visible.sync="dialogVisible"
+            width="30%">
+            <div class="login-register-box">
+                <el-form ref="form" :model="form" label-width="80px">
+                    <el-form-item label="账号">
+                        <el-input v-model="form.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码">
+                        <el-input v-model="form.password" show-password></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="onSubmit">登录</el-button>
+                    </el-form-item>
+                </el-form> 
+            </div>   
+        </el-dialog>
     </div>
 </template>
 <script lang="ts">
 import {
     Component, Provide, Prop, Vue
 } from 'vue-property-decorator';
-import Api from '@/api/api.js';
+import API from '@/api/api.js';
 import { mapActions, mapGetters } from 'vuex';
+
+interface FormObject {
+    name: String,
+    password: String
+}
 
 @Component({
     ...mapGetters(['categories']),
@@ -25,6 +57,13 @@ import { mapActions, mapGetters } from 'vuex';
 })
 
 export default class HomeTab extends Vue {
+    
+    @Provide() dialogVisible: Boolean = false;
+    @Provide() form: FormObject = {
+        name:'',
+        password:''
+    };
+
     created() {
         this.$store.dispatch('getCategories');
         this.$store.dispatch('getTopics', {id: 1});
@@ -43,8 +82,35 @@ export default class HomeTab extends Vue {
         }
     }
 
+    onSubmit() {
+        console.log(this.form);
+        
+        API.login({
+            name: this.form.name,
+            password: this.form.password
+        }).then((res:any) => {
+            this.$message({
+                message: '恭喜你，登录成功',
+                type: 'success'
+            });
+            this.$store.commit('setUser', res);
+            this.dialogVisible = false;
+
+            // 存入缓存
+            localStorage.setItem('user', JSON.stringify(res));
+        }).catch(error => {
+            this.$message.error('账号或密码有误');
+            this.dialogVisible = false;
+        });
+    }
+    
+
     get tabs() {
         return this.$store.state.categories;
+    }
+
+    get userMsg() {
+        return this.$store.state.user;
     }
 }
 </script>
@@ -84,6 +150,32 @@ export default class HomeTab extends Vue {
             }
             .register-btn{
                 margin: 0 20px;
+            }
+        }
+        .login-register-box{
+            text-align: center;
+            padding-right: 40px;
+        }
+        .user-msg{
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            height: 50px;
+            .user-img {
+                width: 40px;
+                height: 40px;
+                margin: 5px 10px 0 0;
+            }
+            .user-name, .user-logout{
+                line-height: 50px;
+                color: #fff;
+                font-size: 16px;
+            }
+            .user-logout{
+                font-size: 18px;
+                margin: 0 10px;
+                cursor: pointer;
             }
         }
     } 

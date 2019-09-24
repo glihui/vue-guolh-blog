@@ -1,5 +1,25 @@
 import NetWork from './network.js';
 
+// 登录
+const login = (params) => {
+    return NetWork.request({
+        url:'authorizations',
+        method: 'post',
+        params
+    }).catch(error => {
+        throw(error);
+    });
+}
+
+// 刷新Token
+const refreshToken = () => {
+    return NetWork.request({
+        url:'authorizations/current',
+        method: 'put'
+    }).catch(error => {
+    })
+}
+
 // 获取话题分类
 const getCategoriesData = () => {
     return NetWork.request({
@@ -30,5 +50,7 @@ const getTopicDetail = (id) => {
 export default {
     getCategoriesData,
     getCategoriesTopic,
-    getTopicDetail
+    getTopicDetail,
+    login,
+    refreshToken
 };
