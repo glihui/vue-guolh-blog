@@ -1,13 +1,11 @@
 import NetWork from './network.js';
 
 // 登录
-const login = (params) => {
+const loginOrRegister = (url,params) => {
     return NetWork.request({
-        url:'authorizations',
+        url,
         method: 'post',
         params
-    }).catch(error => {
-        throw(error);
     });
 }
 
@@ -51,6 +49,6 @@ export default {
     getCategoriesData,
     getCategoriesTopic,
     getTopicDetail,
-    login,
+    loginOrRegister,
     refreshToken
 };

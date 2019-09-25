@@ -17,7 +17,7 @@ import { Component, Provide, Prop, Vue } from 'vue-property-decorator';
 @Component
 export default class Banners extends Vue {
     @Prop() private banList!: Array<Object>;
-    @Provide() msg: string = 's=--';
+    @Provide() msg: string = '';
 }
 </script>
 

@@ -16,7 +16,7 @@ customAxios.interceptors.response.use(
       return response.data;
     },
     error => {
-      return Promise.reject(error);
+      return Promise.reject(error.response.data);
     }
 );
 
@@ -34,18 +34,21 @@ export default {
             params: params
         };
         let user = localStorage.getItem('user');
-        console.log(';')
-        console.log(user);
-        let token = user && JSON.parse(user).meta.access_token;
+        console.log(user)
+        if (user) {
+            let token = JSON.parse(user).meta.access_token;
+            paramsObj.headers = {
+                'Authorization': `Bearer ${token}`
+            }
+        }
         return customAxios({
             url: `/api/${url}`,
             method,
             ...paramsObj,
-            responseType,
-            headers: {
-                'Authorization': `Bearer ${token}`
-                // 'Content-Type': 'application/x-www-form-urlencoded'
-            }
+            responseType
+            // headers: {
+            //     'Content-Type': 'application/x-www-form-urlencoded'
+            // }
         }).then(data => {
             return data;
         }).catch(error => {

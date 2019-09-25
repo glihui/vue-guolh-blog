@@ -7,19 +7,19 @@
             </li>
         </ul>
         <div class="login_register" v-if="!userMsg.name">
-            <div class="login-btn" @click="dialogVisible = true">登录</div>
-            <div class="register-btn">注册</div>
+            <div class="login-btn" @click="goLogOrReg(1)">登录</div>
+            <div class="register-btn" @click="goLogOrReg(2)">注册</div>
         </div>
 
         <div class="user-msg" v-if="userMsg.name">
             <img class="user-img" v-if="userMsg.avatar" :src="userMsg.avatar"/>
             <img class="user-img" v-else src="@/assets/default_boy.png"/>
             <span class="user-name">{{userMsg.name}}</span>
-            <span class="user-logout">退出</span>
+            <span class="user-logout" @click="logout">退出</span>
         </div>
 
         <el-dialog
-            title="登录"
+            :title="loginOrRegist"
             :center="true"
             :visible.sync="dialogVisible"
             width="30%">
@@ -32,7 +32,7 @@
                         <el-input v-model="form.password" show-password></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="onSubmit">登录</el-button>
+                        <el-button type="primary" @click="onSubmit">{{loginOrRegist}}</el-button>
                     </el-form-item>
                 </el-form> 
             </div>   
@@ -59,6 +59,9 @@ interface FormObject {
 export default class HomeTab extends Vue {
     
     @Provide() dialogVisible: Boolean = false;
+    @Provide() loginOrRegist: String = '登录';
+    @Provide() logOrRegFlag: Number = 1;
+
     @Provide() form: FormObject = {
         name:'',
         password:''
@@ -84,13 +87,18 @@ export default class HomeTab extends Vue {
 
     onSubmit() {
         console.log(this.form);
-        
-        API.login({
+        let url = "";
+        if (this.logOrRegFlag === 1) {
+            url = "authorizations";
+        } else {
+            url = "register";
+        }
+        API.loginOrRegister(url,{
             name: this.form.name,
             password: this.form.password
         }).then((res:any) => {
             this.$message({
-                message: '恭喜你，登录成功',
+                message: `恭喜你，${this.loginOrRegist}成功`,
                 type: 'success'
             });
             this.$store.commit('setUser', res);
@@ -99,9 +107,27 @@ export default class HomeTab extends Vue {
             // 存入缓存
             localStorage.setItem('user', JSON.stringify(res));
         }).catch(error => {
-            this.$message.error('账号或密码有误');
+            console.log(error.message);
+            this.$message.error(error.message);
+            
             this.dialogVisible = false;
         });
+    }
+
+    logout() {
+        this.$store.commit('setUser', {});
+        // 清除缓存
+        localStorage.removeItem('user');
+    }
+
+    goLogOrReg(flag) {
+        if(flag === 1) {
+            this.loginOrRegist = '登录';
+        } else {
+            this.loginOrRegist = '注册';
+        }
+        this.dialogVisible = true;
+        this.logOrRegFlag = flag;
     }
     
 
