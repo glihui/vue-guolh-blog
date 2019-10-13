@@ -29,7 +29,7 @@ export default new Vuex.Store({
     getCategories({commit}) {
       API.getCategoriesData().then((res: any) => {
           console.log(res);
-          commit('setCategories', res.data);
+          commit('setCategories', res.data.data);
       });
     },
     getTopics({commit, state, dispatch}, {id}) {
@@ -37,7 +37,7 @@ export default new Vuex.Store({
       commit('setFetchIng', true);
       API.getCategoriesTopic(id).then((res: any) => {
           console.log(res);
-          commit('setTopics', res);
+          commit('setTopics', res.data);
           commit('setFetchIng', false);
       });
     }

@@ -7,7 +7,8 @@ import {
   Form, 
   Input,
   FormItem,
-  Message
+  Message,
+  Upload
  } from 'element-ui';
 import App from './App.vue';
 import router from './router';
@@ -20,6 +21,7 @@ Vue.component(Dialog.name, Dialog);
 Vue.component(Form.name, Form);
 Vue.component(Input.name, Input);
 Vue.component(FormItem.name, FormItem);
+Vue.component(Upload.name, Upload);
 
 Vue.prototype.$message = Message;
 

@@ -12,8 +12,8 @@
         </div>
 
         <div class="user-msg" v-if="userMsg.name">
-            <img class="user-img" v-if="userMsg.avatar" :src="userMsg.avatar"/>
-            <img class="user-img" v-else src="@/assets/default_boy.png"/>
+            <img class="user-img" @click="changeAvatar" v-if="userMsg.avatar" :src="userMsg.avatar"/>
+            <img class="user-img" @click="changeAvatar" v-else src="@/assets/default_boy.png"/>
             <span class="user-name">{{userMsg.name}}</span>
             <span class="user-logout" @click="logout">退出</span>
         </div>
@@ -37,6 +37,34 @@
                 </el-form> 
             </div>   
         </el-dialog>
+
+        <el-dialog
+            title="更换头像"
+            :visible.sync="avtarDialogVisible"
+            :center="true"
+            width="30%">
+            <div class="avatar-box">
+                <el-upload
+                    class="avatar-uploader"
+                    action="/api/images"
+                    name="image"
+                    :data="{type:'avatar'}"
+                    :headers="{
+                        'Authorization': `Bearer ${getToken()}`
+                    }"
+                    :show-file-list="false"
+                    :on-success="handleAvatarSuccess"
+                    :on-error="handleAvatarError"
+                    :before-upload="beforeAvatarUpload">
+                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="avtarDialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="updateAvatar">确 定</el-button>
+                </span>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script lang="ts">
@@ -59,8 +87,11 @@ interface FormObject {
 export default class HomeTab extends Vue {
     
     @Provide() dialogVisible: Boolean = false;
+    @Provide() avtarDialogVisible: Boolean = false;
     @Provide() loginOrRegist: String = '登录';
     @Provide() logOrRegFlag: Number = 1;
+    @Provide() imageUrl: String = '';
+    @Provide() avatarImageId: Number = 0;
 
     @Provide() form: FormObject = {
         name:'',
@@ -97,15 +128,21 @@ export default class HomeTab extends Vue {
             name: this.form.name,
             password: this.form.password
         }).then((res:any) => {
-            this.$message({
-                message: `恭喜你，${this.loginOrRegist}成功`,
-                type: 'success'
-            });
-            this.$store.commit('setUser', res);
-            this.dialogVisible = false;
-
-            // 存入缓存
-            localStorage.setItem('user', JSON.stringify(res));
+            if (res.code === 0) {
+                this.$message({
+                    message: `恭喜你，${this.loginOrRegist}成功`,
+                    type: 'success'
+                });
+                this.$store.commit('setUser', res.data);
+                // 存入缓存
+                localStorage.setItem('user', JSON.stringify(res.data));
+                this.dialogVisible = false;
+            } else {
+                this.$message({
+                    message: res.message,
+                    type: 'error'
+                });
+            }    
         }).catch(error => {
             console.log(error.message);
             this.$message.error(error.message);
@@ -115,6 +152,8 @@ export default class HomeTab extends Vue {
     }
 
     logout() {
+        API.deleteToken().then((res:any) => {  
+        });
         this.$store.commit('setUser', {});
         // 清除缓存
         localStorage.removeItem('user');
@@ -129,7 +168,73 @@ export default class HomeTab extends Vue {
         this.dialogVisible = true;
         this.logOrRegFlag = flag;
     }
+
+    changeAvatar() {
+        this.avtarDialogVisible = true;
+    }
+
+    handleAvatarSuccess(res, file) {
+        console.log(res);
+        if (res.code === 0) {
+            this.imageUrl = URL.createObjectURL(file.raw);
+            this.avatarImageId = res.data.id;
+        } else {
+            this.$message.error(res.message);
+        }
+        
+    }
+
+    handleAvatarError(err, file, fileList) {
+        console.log(err);
+    }
     
+    beforeAvatarUpload(file) {
+        console.log(file.type)
+        const isJPG = file.type === 'image/jpeg' || 'image/png';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+            this.$message.error('上传头像图片只能是 JPG 或 PNG 格式!');
+        }
+        if (!isLt2M) {
+            this.$message.error('上传头像图片大小不能超过 2MB!');
+        }
+        return isJPG && isLt2M;
+    }
+
+    updateAvatar() {
+        if (this.avatarImageId !== 0) {
+            API.editUser(
+                {
+                avatar_image_id: this.avatarImageId
+                }
+            ).then((res:any) => {  
+                console.log(res);
+                this.$message({
+                    message: '头像修改成功',
+                    type: 'success'
+                });
+                // userMsg
+                let userObj = this.userMsg;
+                userObj.avatar = res.data.avatar;
+                localStorage.setItem('user', JSON.stringify(userObj));
+                this.$store.commit('setUser', userObj);
+                console.log(this.userMsg);
+                this.avtarDialogVisible = false;
+            });
+        } else {
+            this.avtarDialogVisible = false;
+        }
+
+        
+        
+    }
+
+    getToken() {
+        let user = localStorage.getItem('user') || '';
+        let token = user ? JSON.parse(user).meta.access_token : '';
+        return token;
+    }
 
     get tabs() {
         return this.$store.state.categories;
@@ -191,7 +296,9 @@ export default class HomeTab extends Vue {
             .user-img {
                 width: 40px;
                 height: 40px;
+                border-radius: 20px;
                 margin: 5px 10px 0 0;
+                cursor: pointer;
             }
             .user-name, .user-logout{
                 line-height: 50px;
@@ -204,6 +311,34 @@ export default class HomeTab extends Vue {
                 cursor: pointer;
             }
         }
+        .avatar-box{
+            text-align: center;
+        }
     } 
+
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+    border-radius: 50%;
+  }
 </style>
 

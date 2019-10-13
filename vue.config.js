@@ -6,7 +6,7 @@ module.exports = {
     devServer: {
         proxy: {
             '/': {
-                target: 'http://guolh-php.guolh.com',
+                target: 'http://blog.test',
                 changeOrigin: true,
                 ws: false,
             }

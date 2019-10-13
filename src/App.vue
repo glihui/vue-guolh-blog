@@ -27,9 +27,9 @@ export default class App extends Vue {
       // 刷新token
       API.refreshToken().then((res:any) => {
         console.log(res);
-        if (res) {
+        if (res.code === 0) {
           let userObj = JSON.parse(user);
-          userObj.meta = res;
+          userObj.meta = res.data;
           localStorage.setItem('user', JSON.stringify(userObj));
           this.$store.commit('setUser', JSON.parse(userObj));
         }

@@ -18,6 +18,25 @@ const refreshToken = () => {
     })
 }
 
+// 删除Token
+const deleteToken = () => {
+    return NetWork.request({
+        url: 'authorizations/current',
+        method: 'delete'
+    }).catch(error => {
+    })
+}
+
+// 编辑用户信息
+const editUser = (params) => {
+    return NetWork.request({
+        url: 'user?incude=user',
+        method: 'patch',
+        params
+    }).catch(error => {
+    })
+}
+
 // 获取话题分类
 const getCategoriesData = () => {
     return NetWork.request({
@@ -50,5 +69,7 @@ export default {
     getCategoriesTopic,
     getTopicDetail,
     loginOrRegister,
-    refreshToken
+    refreshToken,
+    deleteToken,
+    editUser
 };
