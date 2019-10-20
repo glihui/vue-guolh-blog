@@ -8,7 +8,7 @@
             <span class="time">{{detailMsg.created_at}}</span>
             <span class="xie-g">/</span>
             <span class="read-text">阅读:</span>
-            <span class="read-num">0</span>
+            <span class="read-num">{{detailMsg.view_count}}</span>
         </div>
         <div class="content" v-html="detailMsg.body">
         </div>
