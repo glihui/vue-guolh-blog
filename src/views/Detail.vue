@@ -10,8 +10,7 @@
             <span class="read-text">阅读:</span>
             <span class="read-num">0</span>
         </div>
-        <div class="content">
-            {{detailMsg.body}}
+        <div class="content" v-html="detailMsg.body">
         </div>
     </div>
 </template>
@@ -33,8 +32,11 @@ export default class Detail extends Vue{
         let topicId = this.$route.params.id;
         API.getTopicDetail(topicId).then((res:any) => {
             console.log(res);
-            this.detailMsg = res;
-            this.showPage = true;
+            if (res.code === 0) {
+                this.detailMsg = res.data;
+                this.showPage = true;
+            }
+            
         })
     }
 }
@@ -67,8 +69,7 @@ export default class Detail extends Vue{
             }
         }
         .content{
-            font-size: 14px;
-            color: #666;
+            font-size: 16px;
         }
     }
     

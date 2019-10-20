@@ -64,6 +64,24 @@ const getTopicDetail = (id) => {
     });
 }
 
+// 点赞文章
+const goZan = (id) => {
+    return NetWork.request({
+        url: `topics/${id}/zans`,
+        method: 'post',
+    }).catch(error => {
+    });
+}
+
+// 取消点赞文章
+const goUnZan = (id) => {
+    return NetWork.request({
+        url: `topics/${id}/zans`,
+        method: 'delete',
+    }).catch(error => {
+    });
+}
+
 export default {
     getCategoriesData,
     getCategoriesTopic,
@@ -71,5 +89,7 @@ export default {
     loginOrRegister,
     refreshToken,
     deleteToken,
-    editUser
+    editUser,
+    goZan,
+    goUnZan
 };
