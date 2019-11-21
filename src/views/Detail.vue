@@ -12,6 +12,25 @@
         </div>
         <div class="content" v-html="detailMsg.body">
         </div>
+        <div class="comment-box">
+            <div class="comment-title">评论</div>
+            <template>
+                <div class="comment-content" v-for="(item, index) in 5" :key="index">
+                    <div class="comment-top">
+                        <div class="user-avatar">
+                            <img src="@/assets/banner1.jpg"/>
+                        </div>
+                        <div class="nickname-time">
+                            <div class="nickname">solo</div>
+                            <div class="comment-time">2019-11-29</div>
+                        </div>
+                    </div>
+                    <div class="comment-bottom">
+                        只为当初那个梦想，会加油的额！
+                    </div>
+                </div>
+            </template>
+        </div>
     </div>
 </template>
 
@@ -70,6 +89,51 @@ export default class Detail extends Vue{
         }
         .content{
             font-size: 16px;
+        }
+
+        .comment-box{
+           .comment-title{
+                height: 50px;
+                line-height: 50px;
+                font-size: 18px;
+           } 
+           .comment-content{
+               border-top: 1px solid #ddd;
+              .comment-top{
+                  display: flex;
+                  padding: 10px;
+                 .user-avatar{
+                     width: 50px;
+                     height: 50px;
+                     border-radius: 50%;
+                     margin-right: 15px;
+                     img{
+                         border-radius: 50%;
+                         width: 50px;
+                         height: 50px;
+                     }
+                 } 
+                 .nickname-time{
+                     .nickname{
+                        color: #0593d3;
+                        line-height: 22px;
+                        margin-top: 5px;
+                        font-size: 11px;
+                        font-weight: bold;
+                     }
+                     .comment-time{
+                        font-size: 11px;
+                        line-height: 16px;
+                        margin-top: 2px;
+                        color: #999999;
+                     }
+                 }
+              } 
+              .comment-bottom{
+                  padding-left: 75px;
+                  padding-bottom: 25px;
+              }
+           }
         }
     }
     

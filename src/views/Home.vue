@@ -8,6 +8,7 @@
         v-for="(item, index) in topicsList" 
         :key="index"
         :articleValue="item"
+        @zanEvent="zanEvent"
         >
         </Article>
       </div>
@@ -52,6 +53,22 @@ export default class Home extends Vue {
 
   get topicsList () {
     return this.$store.state.topics.data || [];
+  }
+
+  zanEvent(id) {
+    for (let i=0; i<this.topicsList.length; i++) {
+      if (this.topicsList[i].id === id) {
+        
+        if (this.topicsList[i].is_zan === 1) {
+          this.topicsList[i].zan_count -= 1;
+          this.topicsList[i].is_zan = 0;
+        } else {
+          this.topicsList[i].zan_count += 1;
+          this.topicsList[i].is_zan = 1;
+        }
+        return;
+      }
+    }
   }
 }
 </script>

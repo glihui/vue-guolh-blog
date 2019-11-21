@@ -44,6 +44,7 @@ export default class Article extends Vue {
                         message: res.data.msg,
                         type: 'success'
                     });
+                    this.$emit('zanEvent',id);
                 }
             })
         } else {
@@ -54,6 +55,7 @@ export default class Article extends Vue {
                         message: res.data.msg,
                         type: 'success'
                     });
+                    this.$emit('zanEvent',id);
                 }
             })
         }
