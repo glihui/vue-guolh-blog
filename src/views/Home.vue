@@ -44,10 +44,10 @@ import { mapGetters } from 'vuex';
 export default class Home extends Vue {
   @Provide() banList: Array<Object> = [
     {
-      img: require('@/assets/banner1.jpg')
+      img: require('@/assets/dream_2.jpg')
     },
     {
-      img: require('@/assets/banner2.jpg')
+      img: require('@/assets/dream_1.jpg')
     }
   ];
   @Provide() articleList: Array<Object> = [];
@@ -100,7 +100,7 @@ export default class Home extends Vue {
         margin-top: 10px;
         font-size: 18px;
         line-height: 24px;
-        color: #444444;
+        color: #fff;
       }
     }
     .reply-list{

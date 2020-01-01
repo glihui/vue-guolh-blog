@@ -1,7 +1,7 @@
 <template>
     <div class="box" v-if="showPage">
         <div class="title">{{detailMsg.title}}</div>
-        <img class="article-img" :src="detailMsg.img"/>
+        <!-- <img class="article-img" :src="detailMsg.img"/> -->
         <div class="article-sub-msg">
             <span class="type" @click="goCategory">{{detailMsg.category.name}}</span>
             <span class="xie-g">/</span>
@@ -31,7 +31,7 @@
                 </div>
             </template>
         </div>
-        <div class="comment-icon" @click="dialogVisible = true">
+        <div class="comment-icon" v-if="showCommentBtn" @click="dialogVisible = true">
             <img src="@/assets/comment_icon.png">
         </div>
 
@@ -110,6 +110,11 @@ export default class Detail extends Vue{
 
         this.getCommentList();
     }
+
+    get showCommentBtn() {
+        return this.$store.state.user.name;
+    }
+
     // 评论
     goComment() {
         if (this.commentInput == '') {
@@ -173,6 +178,7 @@ export default class Detail extends Vue{
             font-size: 18px;
             line-height: 70px;
             color: #fff;
+            text-align: center;
         }
         .article-img{
             max-width: 100% !important;
@@ -181,6 +187,7 @@ export default class Detail extends Vue{
         .article-sub-msg{
             line-height: 50px;
             color: #fff;
+            text-align: center;
             span{
                 font-size: 14px;
             }

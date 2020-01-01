@@ -9,7 +9,7 @@
             ></Article>
         </div>
         <div v-if="fetchIng" class="loading-box">
-            <img src="@/assets/loading.gif">
+            <img src="@/assets/timg.gif">
         </div>
     </div>
 </template>
@@ -53,7 +53,7 @@ export default class Category extends Vue{
         .category_title{
             height: 40px;
             line-height: 40px;
-            color: #444444;
+            color: #fff;
             font-size: 18px;
         }
     }
