@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <div class="bg-img"></div>
     <div id="nav">
       <HomeTab/>
     </div>
@@ -58,6 +59,18 @@ p{word-wrap:break-word}
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-width: 1200px;
+}
+.bg-img{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  background: url('./assets/bg.jpg') no-repeat;
+  background-size:cover;
+  background-position: center center;
+  
 }
 #nav {
   a {

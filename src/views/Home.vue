@@ -17,6 +17,9 @@
         <Reply v-for="(item, index) in 4" :key="index"></Reply>
       </div>
     </div>
+    <!-- <div class="both-wave" v-for="(item, index) in leftMove" :key="index">
+      <TextWave :moveContent="item"  allTime="20s"></TextWave>
+    </div> -->
   </div>
 </template>
 
@@ -26,6 +29,7 @@ import { Component, Vue, Provide } from 'vue-property-decorator';
 import Banners from '@/components/Banners.vue';
 import Article from '@/components/Article.vue';
 import Reply from '@/components/Reply.vue';
+// import TextWave from '@/components/TextWave.vue';
 import { mapGetters } from 'vuex';
 
 @Component({
@@ -33,6 +37,7 @@ import { mapGetters } from 'vuex';
     Banners,
     Article,
     Reply,
+    // TextWave
   },
   ...mapGetters(['topics'])
 })
@@ -46,9 +51,20 @@ export default class Home extends Vue {
     }
   ];
   @Provide() articleList: Array<Object> = [];
+  @Provide() leftMoveValue: String = "梦想";
+  @Provide() leftMove: String = "";
 
   created () {
-    
+      // let indexFlag = 0;
+      // let intervalTime = setInterval (() => {
+      //   if (indexFlag < this.leftMoveValue.length) {
+      //     this.leftMove += this.leftMoveValue[indexFlag];
+      //     indexFlag++;
+      //   } else {
+      //     clearInterval(intervalTime)
+      //   }
+        
+      // }, 3000);
   }
 
   get topicsList () {
@@ -75,7 +91,7 @@ export default class Home extends Vue {
 
 <style lang="scss" scoped>
   .article-reply{
-    width: 1000px;
+    width: 800px;
     display: flex;
     margin: 0 auto;
     .article-list{
@@ -96,6 +112,13 @@ export default class Home extends Vue {
             margin: 10px 0 0 10px;
         }
     }
+  }
+  .both-wave{
+    position: fixed;
+    width: 200px;
+    left: 0;
+    bottom: -40px;
+    text-align: center;
   }
   
 </style>

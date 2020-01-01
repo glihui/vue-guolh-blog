@@ -248,7 +248,6 @@ export default class HomeTab extends Vue {
 <style lang="scss" scoped>
     .tab_box{
         display: flex;
-        background-color:#0593d3; 
         position: relative;
         .blog_name{
             line-height: 50px;

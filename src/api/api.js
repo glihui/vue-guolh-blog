@@ -82,6 +82,25 @@ const goUnZan = (id) => {
     });
 }
 
+// 获取话题评论列表
+const getCommentList = (id) => {
+    return NetWork.request({
+        url: `topics/${id}/replies?include=user`,
+        method: 'get',
+    }).catch(error => {
+    });
+}
+
+// 评论话题
+const commentTopic = (id, params) => {
+    return NetWork.request({
+        url: `topics/${id}/replies`,
+        method: 'post',
+        params
+    }).catch(error => {
+    });
+}
+
 export default {
     getCategoriesData,
     getCategoriesTopic,
@@ -91,5 +110,7 @@ export default {
     deleteToken,
     editUser,
     goZan,
-    goUnZan
+    goUnZan,
+    getCommentList,
+    commentTopic
 };

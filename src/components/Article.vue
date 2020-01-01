@@ -91,8 +91,8 @@ export default class Article extends Vue {
                 -webkit-line-clamp: 2;
                 overflow: hidden;
                 font-size: 14px;
-                line-height: 20px;
-                color: #666;
+                line-height: 23px;
+                color: #fff;
             }
             .zan_browse{
                 display: flex;
@@ -108,7 +108,7 @@ export default class Article extends Vue {
                 }
                 .zan-num, .brower-num{
                     margin-left: 4px;
-                    color: #b4b4b4;
+                    color: #fff;
                     font-size: 12px;
                 }
             }
