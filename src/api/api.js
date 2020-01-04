@@ -101,6 +101,15 @@ const commentTopic = (id, params) => {
     });
 }
 
+//获取首页banner列表
+const getBanners = () => {
+    return NetWork.request({
+        url:'banners',
+        method: 'get'
+    }).catch(error => {
+    });
+}
+
 export default {
     getCategoriesData,
     getCategoriesTopic,
@@ -112,5 +121,6 @@ export default {
     goZan,
     goUnZan,
     getCommentList,
-    commentTopic
+    commentTopic,
+    getBanners
 };

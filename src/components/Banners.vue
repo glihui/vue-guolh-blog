@@ -4,7 +4,7 @@
             <el-carousel trigger="click" height="400px">
                 <el-carousel-item v-for="(item, index) in banList" :key="index">
                     <div class="banner_content">
-                        <img :src="item.img"/>
+                        <img :src="item.img_url"/>
                     </div>
                 </el-carousel-item>
             </el-carousel>

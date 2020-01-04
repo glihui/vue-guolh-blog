@@ -1,23 +1,24 @@
 <template>
-    <div class="tab_box">
-        <div class="blog_name">Dream It Possible</div>
-        <ul class="tab_ul">
-            <li class="tab_li" :key="index" v-for="(item, index) in tabs" @click="goTabPage(item.id)">
-                {{item.name}}
-            </li>
-        </ul>
-        <div class="login_register" v-if="!userMsg.name">
-            <div class="login-btn" @click="goLogOrReg(1)">登录</div>
-            <div class="register-btn" @click="goLogOrReg(2)">注册</div>
-        </div>
+    <div>
+        <div class="tab_box">
+            <div class="blog_name">Dream It Possible</div>
+            <ul class="tab_ul">
+                <li class="tab_li" :key="index" v-for="(item, index) in tabs" @click="goTabPage(item.id)">
+                    {{item.name}}
+                </li>
+            </ul>
+            <div class="login_register" v-if="!userMsg.name">
+                <div class="login-btn" @click="goLogOrReg(1)">登录</div>
+                <div class="register-btn" @click="goLogOrReg(2)">注册</div>
+            </div>
 
-        <div class="user-msg" v-if="userMsg.name">
-            <img class="user-img" @click="changeAvatar" v-if="userMsg.avatar" :src="userMsg.avatar"/>
-            <img class="user-img" @click="changeAvatar" v-else src="@/assets/default_boy.png"/>
-            <span class="user-name">{{userMsg.name}}</span>
-            <span class="user-logout" @click="logout">退出</span>
+            <div class="user-msg" v-if="userMsg.name">
+                <img class="user-img" @click="changeAvatar" v-if="userMsg.avatar" :src="userMsg.avatar"/>
+                <img class="user-img" @click="changeAvatar" v-else src="@/assets/default_boy.png"/>
+                <span class="user-name">{{userMsg.name}}</span>
+                <span class="user-logout" @click="logout">退出</span>
+            </div>
         </div>
-
         <el-dialog
             :title="loginOrRegist"
             :center="true"
@@ -100,7 +101,41 @@ export default class HomeTab extends Vue {
 
     created() {
         this.$store.dispatch('getCategories');
-        this.$store.dispatch('getTopics', {id: 1});
+
+        setTimeout(() => {
+            // 从缓存获取登录信息
+            let user:string = localStorage.getItem('new_user') || '';
+            if (user !== '') {
+                this.$store.commit('setUser', JSON.parse(user));
+
+                setTimeout(() => {
+                    // 刷新token
+                    API.refreshToken().then((res:any) => {
+                        console.log(res);
+                        if (res.code === 0) {
+                            let userObj = JSON.parse(user);
+                            userObj.meta = res.data;
+                            localStorage.setItem('new_user', JSON.stringify(userObj));
+                            console.log(',,,-',this.$route)
+                            this.$store.commit('setUser', userObj); 
+                        } 
+                        if (this.$route.name === 'category' || this.$route.name === 'home') {
+                            let categoryId = this.$route.params.id;
+                            this.$store.dispatch('getTopics', {id: categoryId ? categoryId : 1});
+                        }
+                    }).catch(error => {
+                        
+                    });
+                }, 1000);
+                
+            } else {
+                if (this.$route.name === 'category' || this.$route.name === 'home') {
+                    let categoryId = this.$route.params.id;
+                    this.$store.dispatch('getTopics', {id: categoryId ? categoryId : 1});
+                }
+            } 
+        }, 500);
+        
     }
 
     goTabPage(id:number) {
@@ -135,7 +170,11 @@ export default class HomeTab extends Vue {
                 });
                 this.$store.commit('setUser', res.data);
                 // 存入缓存
-                localStorage.setItem('user', JSON.stringify(res.data));
+                localStorage.setItem('new_user', JSON.stringify(res.data));
+
+                let categoryId = this.$route.params.id;
+                this.$store.dispatch('getTopics', {id: categoryId ? categoryId : 1});
+
                 this.dialogVisible = false;
             } else {
                 this.$message({
@@ -156,7 +195,10 @@ export default class HomeTab extends Vue {
         });
         this.$store.commit('setUser', {});
         // 清除缓存
-        localStorage.removeItem('user');
+        localStorage.removeItem('new_user');
+
+        let categoryId = this.$route.params.id;
+        this.$store.dispatch('getTopics', {id: categoryId ? categoryId : 1});
     }
 
     goLogOrReg(flag) {
@@ -217,7 +259,7 @@ export default class HomeTab extends Vue {
                 // userMsg
                 let userObj = this.userMsg;
                 userObj.avatar = res.data.avatar;
-                localStorage.setItem('user', JSON.stringify(userObj));
+                localStorage.setItem('new_user', JSON.stringify(userObj));
                 this.$store.commit('setUser', userObj);
                 console.log(this.userMsg);
                 this.avtarDialogVisible = false;
@@ -231,7 +273,7 @@ export default class HomeTab extends Vue {
     }
 
     getToken() {
-        let user = localStorage.getItem('user') || '';
+        let user = localStorage.getItem('new_user') || '';
         let token = user ? JSON.parse(user).meta.access_token : '';
         return token;
     }
@@ -248,7 +290,12 @@ export default class HomeTab extends Vue {
 <style lang="scss" scoped>
     .tab_box{
         display: flex;
-        position: relative;
+        width: 100%;
+        background-color: #194ba8;
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 10;
         .blog_name{
             line-height: 50px;
             font-size: 24px;

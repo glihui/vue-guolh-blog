@@ -35,6 +35,10 @@
             <img src="@/assets/comment_icon.png">
         </div>
 
+        <div class="zan-icon" v-if="showCommentBtn" @click="goZan(detailMsg.id)">
+            <img :src="detailMsg.is_zan ? require('@/assets/zan_icon.png') : require('@/assets/un_zan_icon.png')">
+        </div>
+
         <el-dialog
             title="评论"
             :visible.sync="dialogVisible"
@@ -167,6 +171,32 @@ export default class Detail extends Vue{
         }
         
     }
+
+    goZan(id) {
+        if (this.detailMsg.is_zan) {
+            API.goUnZan(id).then(res => {
+                console.log(res);
+                if (res.code === 0) {
+                    this.$message({
+                        message: res.data.msg,
+                        type: 'success'
+                    });
+                    this.detailMsg.is_zan = 0;
+                }
+            })
+        } else {
+            API.goZan(id).then(res => {
+                console.log(res);
+                if (res.code === 0) {
+                    this.$message({
+                        message: res.data.msg,
+                        type: 'success'
+                    });
+                    this.detailMsg.is_zan = 1;
+                }
+            })
+        }
+    }
 }
 </script>
 
@@ -192,7 +222,7 @@ export default class Detail extends Vue{
                 font-size: 14px;
             }
             .name, .type{
-                color: #0593d3;
+                color: #fff;
                 cursor: pointer;
             }
             .xie-g{
@@ -210,7 +240,8 @@ export default class Detail extends Vue{
                 height: 50px;
                 line-height: 50px;
                 font-size: 18px;
-                color: red;
+                color: #fff;
+                font-weight: bold;
            } 
            .comment-content{
                border-top: 1px solid #ddd;
@@ -230,7 +261,7 @@ export default class Detail extends Vue{
                  } 
                  .nickname-time{
                      .nickname{
-                        color: #0593d3;
+                        color: #fff;
                         line-height: 22px;
                         margin-top: 5px;
                         font-size: 11px;
@@ -255,6 +286,17 @@ export default class Detail extends Vue{
             position: fixed;
             right: 40px;
             bottom: 40px;
+            cursor: pointer;
+            img{
+                width: 48px;
+                height: 48px;
+            }
+        }
+
+        .zan-icon{
+            position: fixed;
+            right: 40px;
+            bottom: 140px;
             cursor: pointer;
             img{
                 width: 48px;

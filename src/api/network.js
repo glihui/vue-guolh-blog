@@ -33,7 +33,7 @@ export default {
         } : {
             params: params
         };
-        let user = localStorage.getItem('user');
+        let user = localStorage.getItem('new_user');
         console.log(user)
         if (user) {
             let token = JSON.parse(user).meta.access_token;

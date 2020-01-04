@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import Api from '@/api/api.js';
+import API from '@/api/api.js';
 import { Component, Vue, Provide } from 'vue-property-decorator';
 import Banners from '@/components/Banners.vue';
 import Article from '@/components/Article.vue';
@@ -42,14 +42,7 @@ import { mapGetters } from 'vuex';
   ...mapGetters(['topics'])
 })
 export default class Home extends Vue {
-  @Provide() banList: Array<Object> = [
-    {
-      img: require('@/assets/dream_2.jpg')
-    },
-    {
-      img: require('@/assets/dream_1.jpg')
-    }
-  ];
+  @Provide() banList: Array<Object> = [];
   @Provide() articleList: Array<Object> = [];
   @Provide() leftMoveValue: String = "梦想";
   @Provide() leftMove: String = "";
@@ -65,6 +58,7 @@ export default class Home extends Vue {
       //   }
         
       // }, 3000);
+      this.getBanners();
   }
 
   get topicsList () {
@@ -85,6 +79,15 @@ export default class Home extends Vue {
         return;
       }
     }
+  }
+
+  getBanners() {
+    API.getBanners().then(res => {
+        console.log(res);
+        if (res.code === 0) {
+            this.banList = res.data.data;
+        }
+    })
   }
 }
 </script>

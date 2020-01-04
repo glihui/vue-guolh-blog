@@ -27,7 +27,6 @@ import { mapGetters } from 'vuex';
 export default class Category extends Vue{
     
     mounted() {
-       
     }
     get fetchIng () {
         return this.$store.state.fetchIng;

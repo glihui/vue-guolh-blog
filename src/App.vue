@@ -4,7 +4,9 @@
     <div id="nav">
       <HomeTab/>
     </div>
-    <router-view/>
+    <div class="view-content">
+      <router-view/>
+    </div>
   </div>
 </template>
 
@@ -12,6 +14,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import HomeTab from '@/components/HomeTab.vue';
 import API from '@/api/api.js';
+import store from './store';
 
 @Component({
   components: {
@@ -19,27 +22,7 @@ import API from '@/api/api.js';
   },
 })
 export default class App extends Vue {
-  created() {
-    // 从缓存获取登录信息
-    let user:string = localStorage.getItem('user') || '';
-    if (user !== '') {
-      this.$store.commit('setUser', JSON.parse(user));
-
-      // 刷新token
-      API.refreshToken().then((res:any) => {
-        console.log(res);
-        if (res.code === 0) {
-          let userObj = JSON.parse(user);
-          userObj.meta = res.data;
-          localStorage.setItem('user', JSON.stringify(userObj));
-          this.$store.commit('setUser', JSON.parse(userObj));
-        }
-        
-      }).catch(error => {
-          
-      });
-    }
-    
+  created() { 
   }
 }
 </script>
@@ -80,6 +63,9 @@ p{word-wrap:break-word}
       color: #42b983;
     }
   }
+}
+.view-content{
+  margin-top: 50px;
 }
 ul li{
   list-style: none;

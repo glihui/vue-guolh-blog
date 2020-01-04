@@ -35,7 +35,14 @@ export default class Article extends Vue {
         })
     }
 
+    get userMsg() {
+        return this.$store.state.user;
+    }
+
     goZan(id) {
+        if (!this.userMsg.name) {
+            return;
+        }
         if (this.articleValue.is_zan) {
             API.goUnZan(id).then(res => {
                 console.log(res);
@@ -81,7 +88,7 @@ export default class Article extends Vue {
                 font-size: 18px;
                 height: 24px;
                 line-height: 24px;
-                color: #0593d3;
+                color: #fff;
             }
             .article-content{
                 width: 100%;
