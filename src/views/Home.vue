@@ -63,6 +63,7 @@ export default class Home extends Vue {
 
   get topicsList () {
     return this.$store.state.topics.data || [];
+    console.log('s')
   }
 
   zanEvent(id) {
