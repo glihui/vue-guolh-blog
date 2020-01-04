@@ -50,7 +50,8 @@ p{word-wrap:break-word}
   left: 0;
   top: 0;
   z-index: -1;
-  background: url('./assets/bg.jpg') no-repeat;
+  // background: url('./assets/bg.jpg') no-repeat;
+  background-color: #194ba8;
   background-size:cover;
   background-position: center center;
   
