@@ -7,18 +7,23 @@
     <div class="view-content">
       <router-view/>
     </div>
+    <div>
+      <Foot/>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import HomeTab from '@/components/HomeTab.vue';
+import Foot from '@/components/Foot.vue';
 import API from '@/api/api.js';
 import store from './store';
 
 @Component({
   components: {
-    HomeTab
+    HomeTab,
+    Foot
   },
 })
 export default class App extends Vue {
